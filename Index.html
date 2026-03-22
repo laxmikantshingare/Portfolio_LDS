@@ -1,1 +1,732 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laxmikant Shingare — Senior Software Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a38;
+    --accent: #7c6af7;
+    --accent2: #a78bfa;
+    --accent3: #38bdf8;
+    --text: #e8e8f0;
+    --text-muted: #8888aa;
+    --text-dim: #55556a;
+    --green: #4ade80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.1;
+  }
+  .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; }
+  .blob-2 { width: 500px; height: 500px; background: var(--accent3); bottom: -100px; right: -100px; }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,15,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-resume {
+    color: var(--accent) !important;
+    border: 1px solid var(--accent);
+    padding: 0.35rem 0.9rem !important;
+    transition: all 0.2s !important;
+  }
+  .nav-resume:hover { background: var(--accent) !important; color: white !important; }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 40px; height: 1px; background: var(--accent); }
+
+  .hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3.5rem, 7vw, 7rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    animation: fadeInUp 0.6s 0.1s ease both;
+  }
+  .hero-name em { font-style: italic; color: var(--accent2); }
+
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-style: italic;
+    animation: fadeInUp 0.6s 0.2s ease both;
+  }
+
+  .hero-summary {
+    max-width: 620px;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.6s 0.3s ease both;
+  }
+  .hero-summary strong { color: var(--text); font-weight: 500; }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+    animation: fadeInUp 0.6s 0.4s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.8rem;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.8rem;
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.6s 0.5s ease both;
+  }
+
+  .stat { display: flex; flex-direction: column; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--text); line-height: 1; }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.25rem;
+  }
+
+  section {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 4rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--text); }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  .experience-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .job {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    transition: border-color 0.3s;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .job::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .job:hover { border-color: var(--accent); }
+  .job:hover::after { opacity: 1; }
+
+  .job-left {}
+  .job-right {}
+
+  .job-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .job-company {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .job-dot { color: var(--border); font-size: 0.7rem; }
+  .job-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  .job-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  .job-narrative {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  .job-highlights { display: flex; flex-direction: column; gap: 1rem; }
+  .job-highlight {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 0.9rem 1.1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    transition: border-color 0.2s;
+  }
+  .job-highlight:nth-child(2) { border-left-color: var(--accent3); }
+  .job-highlight:nth-child(3) { border-left-color: var(--accent2); }
+  .job:hover .job-highlight { border-color: var(--border); }
+
+  .job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .job-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.55rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 900px) {
+    .job { grid-template-columns: 1fr; }
+  }
+
+  .highlight { color: var(--green); font-weight: 500; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    transition: all 0.3s;
+  }
+  .skill-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(124,106,247,0.1);
+  }
+
+  .skill-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+  .skill-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.6rem;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2.5rem;
+    transition: all 0.3s;
+  }
+  .edu-card:hover { border-color: var(--accent3); }
+
+  .edu-degree { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
+  .edu-school { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--accent3); letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .edu-period { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-dim); }
+
+  .contact-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .contact-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .contact-heading em { font-style: italic; color: var(--accent2); }
+  .contact-sub { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-top: 1rem; }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.3s;
+    color: var(--text);
+  }
+  .contact-link:hover { border-color: var(--accent); transform: translateX(6px); }
+  .contact-link-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+  .contact-link-info { flex: 1; }
+  .contact-link-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+  .contact-link-value { font-size: 0.9rem; color: var(--text); }
+  .contact-link-arrow {
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .contact-link:hover .contact-link-arrow { opacity: 1; }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem 4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.9em;
+    background: var(--accent);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero, section { padding: 6rem 1.5rem 3rem; }
+    .contact-inner { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+    footer { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<nav>
+  <div class="nav-logo">LDS</div>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="CareerLDS.docx" download class="nav-resume">↓ Resume</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Senior Software Engineer</div>
+  <h1 class="hero-name"><em>Laxmikant</em><br>Shingare<span class="cursor"></span></h1>
+  <p class="hero-title">Full-Stack Developer </p>
+  <p class="hero-summary">
+    Having 17 years of experience building full-stack systems — but where I really thrive is in the <strong>backend and cloud</strong>: distributed architecture, microservices, APIs, 
+    and the infrastructure that holds everything together. Lately I've been leaning deeper into 
+    <strong>generative AI and agentic systems</strong>, exploring how LLMs and AI agents can fundamentally change the way software is built. 
+    Open to backend-heavy, cloud-native, and AI-focused roles across Healthcare, Banking, Insurance, Airlines or high-scale SaaS.
+  </p>
+  <div class="hero-actions">
+    <a href="https://github.com/laxmikantshingare" target="_blank" class="btn-primary">↗ GitHub</a>
+    <a href="https://www.linkedin.com/in/laxmikant-shingare-4a82751a/" target="_blank" class="btn-secondary">LinkedIn</a>
+    <a href="mailto:laxmikant.shingare@gmail.com" class="contact-link">
+        <div class="contact-link-info">
+          <div class="contact-link-label">Email</div>
+          <div class="contact-link-value">laxmikant.shingare@gmail.com</div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+  </div>
+</div>
+
+<section id="experience">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="experience-grid">
+
+    <div class="job">
+      <div class="job-left">
+        <div class="job-meta">
+          <span class="job-company">United Airlines</span>
+          <span class="job-dot">·</span>
+          <span class="job-period">Feb 2022 — Present</span>
+        </div>
+        <div class="job-title">Lead Application Engineer</div>
+        <p class="job-narrative"> Working with EPS (Engine Planning System) and APS (Airline Print Solution) Projects for enhancing the existing system for United airlines, 
+          Managing Flight Engines for United Airlines and keeping eye on scheduled and timely Engine maintenance based on Engine status and duration for Miles travelled by the Airplane.</p>
+        <div class="job-tags">
+          <span class="job-tag">.NET / C#</span>
+          <span class="job-tag">Azure DevOps</span><span class="job-tag">Veracode</span>
+          <span class="job-tag">REST API's</span><span class="job-tag">Microservices</span>
+          <span class="job-tag">SQL Server</span><span class="job-tag">React</span>
+          <span class="job-tag">GitHub Actions</span><span class="job-tag">F5 Servers Load Balancing </span>
+          <span class="job-tag">ETL </span><span class="job-tag">Copilot</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div class="job-highlights">
+          <div class="job-highlight">Project Managing for implementing secured protocols for APS Application using .Net , REACT and https configurations by removing code vulnerabilities.</div>
+          <div class="job-highlight">Managing Engine status manually when required using DB Scripts on Production Server’s for EPS and using ETL and Power BI.</div>
+          <div class="job-highlight">Designing and Developing API's in C#.Net using Visual Studio 2022, Business Layer Objects, Data Layer Objects and interacting with Database based on role and permissions.</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="job">
+      <div class="job-left">
+        <div class="job-meta">
+          <span class="job-company">Atos- Syntel</span>
+          <span class="job-dot">·</span>
+          <span class="job-period">April 2010 — Feb 2019</span>
+        </div>
+        <div class="job-title">Seniour Software Engineer</div>
+        <p class="job-narrative">
+          Played multiple roles when working with Atos Syntel for 9 Years
+        </p>
+        <div class="job-tags">
+          <span class="job-tag">ASP.NET Core</span><span class="job-tag">Azure</span><span class="job-tag">Oracle / PL-SQL</span><span class="job-tag">REST APIs</span><span class="job-tag">CI/CD</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div class="job-highlights">
+          <div class="job-highlight">Built ASP.NET Core MVC applications covering the full insurance lifecycle — claims, policy management, and secure authentication.</div>
+          <div class="job-highlight">Led a legacy-to-Azure migration with Oracle integrations and CI/CD automation — modernising without disrupting live operations.</div>
+          <div class="job-highlight">Implemented async REST APIs that gave the backend the responsiveness the business needed to operate at scale.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-left">
+        <div class="job-meta">
+          <span class="job-company">WebWorx Pune</span>
+          <span class="job-dot">·</span>
+          <span class="job-period">Jun 2017 — May 2018</span>
+        </div>
+        <div class="job-title">Software Developer </div>
+        <p class="job-narrative">Worked for Lodging World, London UK. Where it started — shipping real software in a real team. understood the full request lifecycle from browser to database, and built the full-stack instincts that still shape how I think about systems today.</p>
+        <div class="job-tags">
+          <span class="job-tag">C# / ASP.NET</span><span class="job-tag">Entity Framework</span><span class="job-tag">JavaScript</span><span class="job-tag">SQL</span><span class="job-tag">Git</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div class="job-highlights">
+          
+          <div class="job-highlight">The Objective of system is to maintain Hotel Information from Booking.com and Lodging World. </div>
+          <div class="job-highlight">Built and deployed web applications in C# and ASP.NET with Entity Framework — proper version control and team workflows from day one.</div>
+          <div class="job-highlight">Developed frontend components in Asp.Net and Ajax with SQL Server backends, learning to think across the full stack from the start.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-category">Full Stack Developer</div>
+      <div class="skill-tags">
+        <span class="tag">C#</span><span class="tag">.NET Core</span><span class="tag">ASP.NET</span>
+        <span class="tag">Web API</span><span class="tag">REST APIs</span><span class="tag">Microservices</span>
+        <span class="tag">Entity Framework</span><span class="tag">Python</span><span class="tag">React</span>
+        <span class="tag">JavaScript</span><span class="tag">HTML</span><span class="tag">CSS</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">☁️</div>
+      <div class="skill-category">Cloud &amp; DevOps</div>
+      <div class="skill-tags">
+        <span class="tag">Azure</span><span class="tag">AWS</span><span class="tag">Docker</span>
+        <span class="tag">Kubernetes</span><span class="tag">GitHub Actions</span><span class="tag">Jenkins</span><span class="tag">CI/CD</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-category">Databases</div>
+      <div class="skill-tags">
+        <span class="tag">SQL Server</span><span class="tag">Oracle</span><span class="tag">PL/SQL</span>
+        <span class="tag">Stored Procedures</span><span class="tag">Performance Tuning</span><span class="tag">Query Optimization</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🤖</div>
+      <div class="skill-category">AI &amp; Agentic</div>
+      <div class="skill-tags">
+        <span class="tag">Cursor AI</span><span class="tag">GitHub Copilot</span><span class="tag">Claude API</span>
+        <span class="tag">Azure OpenAI</span><span class="tag">LangChain</span><span class="tag">AI Agents</span><span class="tag">MCP</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔐</div>
+      <div class="skill-category">Testing &amp; Security</div>
+      <div class="skill-tags">
+        <span class="tag">Unit Testing</span><span class="tag">Integration Testing</span><span class="tag">OAuth2</span>
+        <span class="tag">JWT</span><span class="tag">Logging</span><span class="tag">Monitoring</span><span class="tag">HIPAA</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Education</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-degree">Master of Science in<br>Computer Science</div>
+      <div class="edu-school">University Of Pune</div>
+
+    </div>
+    <div class="edu-card">
+      <div class="edu-degree">Bachelor's in <br>Computer Science</div>
+      <div class="edu-school">University Of Pune </div>
+    
+    </div>
+  </div>
+</section>
+
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="hero-eyebrow" style="animation:none; margin-bottom:1rem;">Let's Connect</div>
+      <h2 class="contact-heading">Open to <em>new<br>opportunities</em></h2>
+      <p class="contact-sub">Based in Phoenix, AZ and open to relocate. Available for senior engineering / architecture / PM / TPM Roles.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:laxmikant.shingare@" class="contact-link">
+        <span class="contact-link-icon">✉</span>
+        <div class="contact-link-info">
+          <div class="contact-link-label">Email</div>
+          <div class="contact-link-value">laxmikant.shingare@</div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="tel:+16082078721" class="contact-link">
+        <span class="contact-link-icon">☎</span>
+        <div class="contact-link-info">
+          <div class="contact-link-label">Phone</div>
+          <div class="contact-link-value">+1 (608) 207-8721</div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="https://www.linkedin.com/in/laxmikant-shingare-4a82751a/" target="_blank" class="contact-link">
+        <span class="contact-link-icon">in</span>
+        <div class="contact-link-info">
+          <div class="contact-link-label">LinkedIn</div>
+          <div class="contact-link-value">linkedin.com/in/laxmikant-shingare-4a82751a/</div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="https://github.com/laxmikantshingare" target="_blank" class="contact-link">
+        <span class="contact-link-icon">⌥</span>
+        <div class="contact-link-info">
+          <div class="contact-link-label">GitHub</div>
+          <div class="contact-link-value">github.com/laxmikantshingare</div>
+        </div>
